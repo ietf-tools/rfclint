@@ -31,7 +31,7 @@ The tool can be used either in an interactive mode or in batch mode.
 
 ## Usage
 
-``rfclint accepts a single XML document as input and optionally outputs a modified version
+`rfclint` accepts a single XML document as input and optionally outputs a modified version
 of the document.
 
 ### Basic Usage
