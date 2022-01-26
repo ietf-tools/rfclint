@@ -13,7 +13,7 @@
 </div>
 
 - [Changelog](https://github.com/ietf-tools/rfclint/blob/main/CHANGELOG.md)
-- [Contributing](https://github.com/ietf-tools/rfclint/blob/main/CONTRIBUTING.md)
+- [Contributing](https://github.com/ietf-tools/.github/blob/main/CONTRIBUTING.md)
 
 ---
 
