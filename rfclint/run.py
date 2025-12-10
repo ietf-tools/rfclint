@@ -68,8 +68,6 @@ def main():
                               help='don\'t use the network to resolve references')
     parser_options.add_option('-n', '--no-rng', action='store_true',
                               help='disable RNG validation step')
-    parser_options.add_option('-r', '--rng', action='store_true',
-                              help='Specify an alternate RNG file')
 
     optionparser.add_option_group(parser_options)
 
@@ -217,9 +215,7 @@ def main():
     # Validate the document unless disabled
     if not options.no_rng:
         log.note("Checking for schema validation...")
-        if not options.rng:
-            options.rng = parser.default_rng_path
-        ok, errors = xmlrfc.validate(rng_path=options.rng)
+        ok, errors = xmlrfc.validate()
         if not ok:
             log.error('Unable to validate the XML document: ' + os.path.normpath(source))
             log.exception_lines("dummy", errors)
