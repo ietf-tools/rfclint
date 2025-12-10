@@ -70,8 +70,6 @@ def main():
                               help='disable RNG validation step')
     parser_options.add_option('-r', '--rng', action='store_true',
                               help='Specify an alternate RNG file')
-    parser_options.add_option('-X', '--no-xinclude', action='store_true', dest='no_xinclude',
-                              help='don\'t resolve any xi:include elements')
 
     optionparser.add_option_group(parser_options)
 
@@ -198,11 +196,9 @@ def main():
     # Parse the document into an xmlrfc tree instance
     log.note("Checking for well-formness of '{0}'".format(source))
     parser = XmlRfcParser(source, verbose=options.verbose,
-                          preserve_all_white=True,
                           quiet=True,
                           cache_path=options.cache,
                           no_network=options.no_network,
-                          no_xinclude=options.no_xinclude,
                           templates_path=globals().get('_TEMPLATESPATH', None))
     try:
         xmlrfc = parser.parse(remove_comments=False,
