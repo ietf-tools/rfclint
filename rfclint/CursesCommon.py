@@ -11,7 +11,7 @@ except ImportError:
 import codecs
 import six
 import re
-from rfctools_common import log
+from xml2rfc import log
 
 
 def ReplaceWithONE(exc):

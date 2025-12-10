@@ -13,7 +13,7 @@ except ImportError:
     haveCurses = False
 
 from rfclint.CursesCommon import CursesCommon
-from rfctools_common import log
+from xml2rfc import log
 from rfclint.spell import RfcLintError, CheckAttributes, CutNodes
 
 if six.PY2:

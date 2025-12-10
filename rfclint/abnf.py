@@ -8,7 +8,7 @@ import subprocess
 import re
 import os
 import six
-from rfctools_common import log
+from xml2rfc import log
 from rfclint.spell import which, RfcLintError
 
 if six.PY3:

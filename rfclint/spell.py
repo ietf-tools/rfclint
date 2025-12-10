@@ -14,7 +14,7 @@ try:
     haveCurses = True
 except ImportError:
     haveCurses = False
-from rfctools_common import log
+from xml2rfc import log
 from rfclint.CursesCommon import CursesCommon
 
 

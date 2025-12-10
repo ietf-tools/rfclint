@@ -5,20 +5,14 @@
 import appdirs
 import six
 
-try:
-    from configparser import SafeConfigParser, NoSectionError, NoOptionError, ConfigParser
-except ImportError:
-    from ConfigParser import SafeConfigParser, NoSectionError, NoOptionError
+from configparser import ConfigParser, NoSectionError, NoOptionError
 
 
 class ConfigFile(object):
     def __init__(self, options):
         self.options = options
 
-        if six.PY2:
-            self.config = SafeConfigParser()
-        else:
-            self.config = ConfigParser()
+        self.config = ConfigParser()
 
         if options:
             if not options.config_file:

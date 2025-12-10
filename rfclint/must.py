@@ -8,7 +8,7 @@ import sys
 import lxml.etree
 
 from rfclint.CursesCommon import CursesCommon
-from rfctools_common import log
+from xml2rfc import log
 
 if os.name == 'nt':
     import msvcrt

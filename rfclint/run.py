@@ -12,9 +12,9 @@ import optparse
 import os
 import lxml.etree
 import six
-from rfctools_common.parser import XmlRfcParser, XmlRfcError, CACHES, CachingResolver
-from rfctools_common import log
-from rfctools_common.__init__ import __version__ as toolsVersion
+from xml2rfc.parser import XmlRfcParser, XmlRfcError, CachingResolver
+from xml2rfc import log, CACHES
+from xml2rfc.__init__ import __version__ as toolsVersion
 from rfclint.config import ConfigFile
 from rfclint.abnf import AbnfChecker, RfcLintError
 from rfclint.spell import Speller, SpellerColors
