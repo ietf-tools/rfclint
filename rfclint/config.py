@@ -3,7 +3,6 @@
 # ----------------------------------------------------
 
 import appdirs
-import six
 
 from configparser import ConfigParser, NoSectionError, NoOptionError
 
