@@ -119,10 +119,9 @@ class Dups(CursesCommon):
                         else:
                             if attributeName:
                                 log.error("Duplicate word found '{0}' in attribute '{1}'".
-                                          format(lastX, attributeName), "1")
+                                          format(lastX, attributeName))
                             else:
-                                log.error("Duplicate word found '{0}'".format(lastX),
-                                          "1")
+                                log.error("Duplicate word found '{0}'".format(lastX))
 
                 last = g
                 lastX = w.group(0).strip()

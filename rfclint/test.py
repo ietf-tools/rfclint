@@ -217,7 +217,7 @@ class Test_Schema(unittest.TestCase):
                      "Need version 5.10 for this to work")
     def test_invalid_xml(self):
         """ Load and run with an invalid XML file """
-        check_process(self, [sys.executable, test_program, "Tests/bad.xml"],
+        check_process(self, [sys.executable, test_program, "--no-rng", "Tests/bad.xml"],
                       "Results/bad.out", "Results/bad.err", None, None)
 
     def test_invalid_rng(self):
@@ -425,7 +425,7 @@ class Test_Spell(unittest.TestCase):
     def test_add_context(self):
         """ Do basic quiet spell checking """
         check_process(self, [sys.executable, test_program, "--no-suggest", "--no-dup-detection",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--color=none", "Tests/spell.xml"],
                       "Results/spell-context.out",
                       "Results/spell-context.err", None, None)
@@ -433,14 +433,14 @@ class Test_Spell(unittest.TestCase):
     def test_error_one_no_suggest(self):
         """ Do basic quiet spell checking """
         check_process(self, [sys.executable, test_program, "--no-suggest", "--spell-window=0",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--no-dup-detection", "Tests/spell.xml"],
                       "Results/spell-no-suggest.out", "Results/spell-no-suggest.err", None, None)
 
     def test_add_dict(self):
         """ Add a simple dictionary with my name """
         check_process(self, [sys.executable, test_program, "--no-suggest", "--spell-window=0",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--no-dup-detection", "--dictionary=Tests/schaad.wl",
                              "Tests/spell.xml"],
                       "Results/spell-add-dict.out", "Results/spell-add-dict.err", None, None)
@@ -448,7 +448,7 @@ class Test_Spell(unittest.TestCase):
     def test_add_dict_not(self):
         """ Add a simple dictionary which does not exit """
         check_process(self, [sys.executable, test_program, "--no-suggest", "--spell-window=0",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--no-dup-detection", "--dictionary=schaad.wl", "Tests/spell.xml"],
                       "Results/spell-add-dict-not.out", "Results/spell-add-dict-not.err",
                       None, None)
@@ -456,21 +456,21 @@ class Test_Spell(unittest.TestCase):
     def test_add_personal_dict(self):
         """ Add a simple dictionary with my name """
         check_process(self, [sys.executable, test_program, "--no-suggest", "--spell-window=0",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--no-dup-detection", "--personal=Tests/schaad.wl", "Tests/spell.xml"],
                       "Results/spell-add-per.out", "Results/spell-add-per.err", None, None)
 
     def test_add_personal_dict_not(self):
         """ Add a simple dictionary which does not exist """
         check_process(self, [sys.executable, test_program, "--no-suggest", "--spell-window=0",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--no-dup-detection", "--personal=schaad.wl", "Tests/spell.xml"],
                       "Results/spell-add-per-not.out", "Results/spell-add-per-not.err", None, None)
 
     def test_no_program(self):
         """ No spell executable """
         check_process(self, [sys.executable, test_program, "--spell-program=no-spell",
-                             "--no-abnf", "--no-xml",
+                             "--no-abnf", "--no-xml", "--no-rng",
                              "--no-dup-detection", "Tests/spell.xml"],
                       "Results/spell-no-program.out", "Results/spell-no-program.err", None, None)
 
@@ -720,7 +720,10 @@ def compare_file(errFile, stderr, displayError):
     cwd = os.getcwd()
     if os.name == 'nt':
         cwd = cwd.replace('\\', '/')
-    lines2 = [line.replace('$$CWD$$', cwd) for line in lines2]
+    cwd += "/"
+    lines2 = [line.replace('$$CWD$$', '') for line in lines2]
+    lines2 = [line.replace(cwd, '') for line in lines2]
+    lines1 = [line.replace(cwd, '') for line in lines1]
 
     d = difflib.Differ()
     result = list(d.compare(lines1, lines2))
