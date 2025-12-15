@@ -235,8 +235,8 @@ class Test_Schema(unittest.TestCase):
     def test_invalid_svg(self):
         """ Load and run w/ a valid RFC, but invalid included SVG file """
         check_process(self, [sys.executable, test_program, "--no-rng", "--no-spell",
-                             "Tests/bad_rfc_svg.xml"], "Results/bad_rfc_svg.out",
-                             "Results/bad_rfc_svg.err", None, None)
+                             "Tests/bad_rfc_svg.xml"],
+                      "Results/bad_rfc_svg.out", "Results/bad_rfc_svg.err", None, None)
 
     def test_clean_rng(self):
         """ Load and run w/ a valid RFC """
@@ -729,14 +729,15 @@ def compare_file(errFile, stderr, displayError):
     # Remove xml2rfc DTD warnings
     lines1 = [line for line in lines1 if not line.startswith("Warning: No DTD given")]
     # Remove non-ASCII warnings
-    lines1 = [line for line in lines1 if not line.strip().endswith("non-ASCII characters in RFCXML.")]
+    lines1 = [line for line in lines1 if not line.strip().endswith(
+                                                    "non-ASCII characters in RFCXML.")]
 
     d = difflib.Differ()
     result = list(d.compare(lines1, lines2))
 
     hasError = False
-    for l in result:
-        if l[0:2] == '+ ' or l[0:2] == '- ':
+    for r in result:
+        if r[0:2] == '+ ' or r[0:2] == '- ':
             hasError = True
             break
     if hasError and displayError:
@@ -787,8 +788,8 @@ def check_process(tester, args, stdoutFile, errFiles, generatedFile, compareFile
         result = list(d.compare(lines1, lines2))
 
         hasError = False
-        for l in result:
-            if l[0:2] == '+ ' or l[0:2] == '- ':
+        for r in result:
+            if r[0:2] == '+ ' or r[0:2] == '- ':
                 hasError = True
                 break
         if hasError:
@@ -817,8 +818,8 @@ def check_process(tester, args, stdoutFile, errFiles, generatedFile, compareFile
         result = list(d.compare(lines1, lines2))
 
         hasError = False
-        for l in result:
-            if l[0:2] == '+ ' or l[0:2] == '- ':
+        for r in result:
+            if r[0:2] == '+ ' or r[0:2] == '- ':
                 hasError = True
                 break
 

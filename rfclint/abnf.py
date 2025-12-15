@@ -69,7 +69,8 @@ class AbnfChecker(object):
                     runningLine = 0
                     for xxx in xtract.lineOffsets:
                         if line < runningLine + xxx[2]:
-                            log.error("{0}:{1}: {2}".format(xxx[0], xxx[1] + line - runningLine, m.group(4)))
+                            log.error("{0}:{1}: {2}".format(
+                                      xxx[0], xxx[1] + line - runningLine, m.group(4)))
                             noError = False
                             break
                         runningLine += xxx[2] - 1
