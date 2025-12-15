@@ -127,7 +127,7 @@ If no curses library is detected, rfclint will automatically turn on the `--no-c
 ## Dependencies
 
 Various features on `rfclint` depends on the following external packages:
- * [ Bill's ABNF Parser (BAP)](https://github.com/ietf-tools/bap)
+ * [Bill's ABNF Parser (BAP)](https://github.com/ietf-tools/bap)
  * [aspell](http://aspell.net)
 
  ## Running `rfclint` tests for development
