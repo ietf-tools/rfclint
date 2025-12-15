@@ -51,14 +51,12 @@ rfclint [options] SOURCE
 | `. `           | `--save-config`         | save configuration back to config file          |
 | `-v`           | `--verbose`             | print extra information                         |
 | `-V`           | `--version`             | display the version number and exit             |
-| `-X`           | `--no-xinclude`         | don't resolve xi:include elements               |
 | `.`            | `--no-xml`              | don't check xml examples for well-formness      |
 | `.`            | `--bcp14`               | do checking for bcp14 keywords                  |
 | `.`            | `--no-svgcheck`         | skip check svg for limited vocabulary           |
 | `-c DIRECTORY` | `--cache=DIRECTORY`     | specify the primary cache directory to write to |
 | `.`            | `--configfile=FILENAME` | specify the configuration file to use           |
 | `-o FILENAME`  | `--out=FILENAME`        | specify an output filename                      |
-| `-r RNG`       | `--rng=RNG`             | specify an alternate RNG file                   |
 | `.`            | `--extract=TYPE`        | extract all source code for the given type      |
 
 ### Spelling Options
@@ -128,12 +126,12 @@ If no curses library is detected, rfclint will automatically turn on the `--no-c
 
 ## Dependencies
 
-`rfclint` depends on the following packages:
+Various features on `rfclint` depends on the following external packages:
+ * [ Bill's ABNF Parser (BAP)](https://github.com/ietf-tools/bap)
+ * [aspell](http://aspell.net)
 
-- [lxml](http://lxml.de) *(>= 4.1.1)*
-- [requests](http://docs.python-requests.org) *(>= 2.5.0)*
-- [rfctools_common](https://pypi.python.org/pypi/pip) *(>= 0.5.16)*
-- six
-- colorama
-- appdirs
-- [svgcheck](https://pypi.python.org/pypi/svgcheck) *(>=0.5.14)*
+ ## Running `rfclint` tests for development
+
+ ```
+ tox
+ ```
