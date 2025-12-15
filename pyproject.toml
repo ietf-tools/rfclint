@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rfclint"
+dynamic = ["version"]
+authors = [
+  {name = "IETF Tools", email = "tools-help@ietf.org"},
+]
+description = "Perform a set of checks on an RFC input file to check for errors."
+keywords = ["validation", "rfc", "internet-draft"]
+readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+requires-python = ">=2.7"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Other Audience",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Markup :: XML",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+]
+dependencies = [
+    "lxml>=4.1.1",
+    "requests>=2.5.0",
+    "six",
+	"xml2rfc>=3.24.0",
+    "colorama",
+    "appdirs",
+    "svgcheck>=0.6.0",
+]
+
+[project.urls]
+homepage = "https://github.com/ietf-tools/rfclint"
+source = "https://github.com/ietf-tools/rfclint"
+issues = "https://github.com/ietf-tools/rfclint/issues"
+changelog = "https://github.com/ietf-tools/rfclint/blob/main/CHANGELOG.md"
+releasenotes = "https://github.com/ietf-tools/rfclint/releases"
+
+[project.optional-dependencies]
+tests = [
+    "coverage",
+	"flake8",
+    "tox",
+]
+
+[project.scripts]
+rfclint = "rfclint.run:main"
+
+[tool.setuptools]
+py-modules = ["rfclint"]
+
+[tool.setuptools.dynamic]
+version = {attr = "rfclint.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["rfclint"]

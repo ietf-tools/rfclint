@@ -1,4 +1,4 @@
-<rfc>
+<rfc ipr="trust200902" docName="draft-schaad-abnf-extras-00"  category="exp" submissionType= "independent" version="3">
   <front>
     <title/>
     
@@ -7,7 +7,7 @@
     </author>
   </front>
   <middle>
-    <section>
+    <section title="ABNF">
   <sourcecode type="abnf">
     <![CDATA[
 cddl = S 1*rule

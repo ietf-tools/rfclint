@@ -12,9 +12,9 @@ import optparse
 import os
 import lxml.etree
 import six
-from rfctools_common.parser import XmlRfcParser, XmlRfcError, CACHES, CachingResolver
-from rfctools_common import log
-from rfctools_common.__init__ import __version__ as toolsVersion
+from xml2rfc.parser import XmlRfcParser, XmlRfcError, CachingResolver
+from xml2rfc import log, CACHES
+from xml2rfc.__init__ import __version__ as xml2rfcVersion
 from rfclint.config import ConfigFile
 from rfclint.abnf import AbnfChecker, RfcLintError
 from rfclint.spell import Speller, SpellerColors
@@ -33,7 +33,7 @@ except ImportError:
 
 def display_version(self, opt, value, parser):
     print("rfclint = " + rfclint.__version__)
-    print("rfctools_common = " + toolsVersion)
+    print("xml2rfc = " + xml2rfcVersion)
     print("svgcheck = " + svgcheckVersion)
     sys.exit()
 
@@ -68,10 +68,6 @@ def main():
                               help='don\'t use the network to resolve references')
     parser_options.add_option('-n', '--no-rng', action='store_true',
                               help='disable RNG validation step')
-    parser_options.add_option('-r', '--rng', action='store_true',
-                              help='Specify an alternate RNG file')
-    parser_options.add_option('-X', '--no-xinclude', action='store_true', dest='no_xinclude',
-                              help='don\'t resolve any xi:include elements')
 
     optionparser.add_option_group(parser_options)
 
@@ -198,12 +194,9 @@ def main():
     # Parse the document into an xmlrfc tree instance
     log.note("Checking for well-formness of '{0}'".format(source))
     parser = XmlRfcParser(source, verbose=options.verbose,
-                          preserve_all_white=True,
                           quiet=True,
                           cache_path=options.cache,
-                          no_network=options.no_network,
-                          no_xinclude=options.no_xinclude,
-                          templates_path=globals().get('_TEMPLATESPATH', None))
+                          no_network=options.no_network)
     try:
         xmlrfc = parser.parse(remove_comments=False,
                               strip_cdata=False)
@@ -214,21 +207,19 @@ def main():
         # Give the lxml.etree.XmlSyntaxError exception a line attribute which
         # matches lxml.etree._LogEntry, so we can use the same logging function
         log.error("Unable to parse the XML document: " + os.path.normpath(source))
-        log.exception_lines("dummy", e.error_log)
+        log.exception("dummy", e.error_log)
         sys.exit(1)
     log.note("Well-formness passes")
 
     # Validate the document unless disabled
     if not options.no_rng:
         log.note("Checking for schema validation...")
-        if not options.rng:
-            options.rng = parser.default_rng_path
-        ok, errors = xmlrfc.validate(rng_path=options.rng)
+        ok, errors = xmlrfc.validate()
         if not ok:
             log.error('Unable to validate the XML document: ' + os.path.normpath(source))
-            log.exception_lines("dummy", errors)
+            log.exception("dummy", errors)
             sys.exit(1)
-        log.info("Schema validation passes")
+        log.write("Schema validation passes")
     else:
         log.note("Skipping schema validation")
 
@@ -285,13 +276,13 @@ def main():
                     file = six.BytesIO(text.encode('utf-8'))
 
                     lxml.etree.parse(file, parser)
-                    log.info("XML fragment in source code found and is well defined.", where=item)
+                    log.note("XML fragment in source code found and is well defined.")
                 except (lxml.etree.XMLSyntaxError) as e:
-                    log.warn(u'XML in sourcecode not well formed: ', e.msg, where=item)
+                    log.warn(u'XML in sourcecode not well formed: ', e.msg)
                 except Exception as e:
                     log.exception(u'Error occured processing XML: ', e)
         else:
-            log.info("No XML fragments in sourcecode elements found.")
+            log.note("No XML fragments in sourcecode elements found.")
 
     #  Validate any embedded ABNF
     if not options.no_abnf:
@@ -301,7 +292,7 @@ def main():
             checker.validate(xmlrfc.tree)
         except RfcLintError as e:
             log.error("Skipping ABNF checking because")
-            log.error(e.message, additional=2)
+            log.error(e.message)
 
     # Validate any SVG items
     if not options.no_svgcheck:
@@ -320,7 +311,7 @@ def main():
             speller.endwin()
         except RfcLintError as e:
             log.error("Skipping spell checking because")
-            log.error(e.message, additional=2)
+            log.error(e.message)
             if speller:
                 speller.endwin()
         except Exception:
@@ -340,7 +331,7 @@ def main():
         except RfcLintError as e:
             dups.endwin()
             log.error("Skipping duplicate checking because")
-            log.error(e.message, additional=2)
+            log.error(e.message)
         except Exception:
             dups.endwin()
             raise

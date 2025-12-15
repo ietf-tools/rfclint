@@ -14,7 +14,7 @@ try:
     haveCurses = True
 except ImportError:
     haveCurses = False
-from rfctools_common import log
+from xml2rfc import log
 from rfclint.CursesCommon import CursesCommon
 
 
@@ -526,11 +526,9 @@ class Speller(CursesCommon):
                 else:
                     if attributeName:
                         log.error("Misspelled word '{0}' in attribute '{1}'".format(w.group(0),
-                                                                                    attributeName),
-                                  where=words[1])
+                                                                                    attributeName))
                     else:
-                        log.error(u"Misspelled word was found '{0}'".format(w.group(0)),
-                                  where=words[1])
+                        log.error(u"Misspelled word was found '{0}'".format(w.group(0)))
                     if self.window > 0:
                         if wordNo >= 0:
                             ctx = ""
@@ -541,10 +539,11 @@ class Speller(CursesCommon):
                                 ctx += "".join(
                                     allWords[wordNo + 1:
                                              min(wordNo + self.window + 1, len(allWords))])
-                            log.error(ctx, additional=2)
+                            log.error(ctx)
+
                     if self.suggest and sp[0][4]:
                         suggest = " ".join(sp[0][4].split()[0:10])
-                        log.error(suggest, additional=2)
+                        log.error(suggest)
 
     def Interact(self, element, match, srcLine, wordSet, words, spellInfo):
         #

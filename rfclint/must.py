@@ -8,7 +8,7 @@ import sys
 import lxml.etree
 
 from rfclint.CursesCommon import CursesCommon
-from rfctools_common import log
+from xml2rfc import log
 
 if os.name == 'nt':
     import msvcrt
@@ -76,11 +76,10 @@ class Lang2119(CursesCommon):
                 inner = lxml.etree.tostring(tree, with_tail=False)
                 if not isinstance(inner, type('')):
                     inner = inner.decode('utf8')
-                log.error(u"text '{0}' in bcp14 tag is not bcp14 language".format(inner),
-                          where=tree)
+                log.error(u"text '{0}' in bcp14 tag is not bcp14 language".format(inner))
             elif not self.bcp14_re.match(tree.text):
                 log.error(u"text '{0}' in bcp14 tag is not bcp14 language".
-                          format(tree.text), where=tree)
+                          format(tree.text))
         elif tree.text:
             xx = self.bcp14_re.search(tree.text)
             if xx:
@@ -95,7 +94,7 @@ class Lang2119(CursesCommon):
                     xx = self.bcp14_re.finditer(tree.text)
                     for x in xx:
                         log.error(u"bcp14 text '{0}' found without bcp14 tag around it".
-                                  format(x.group(0)), where=tree)
+                                  format(x.group(0)))
         if tree.tail:
             xx = self.bcp14_re.search(tree.tail)
             if xx:
@@ -111,7 +110,7 @@ class Lang2119(CursesCommon):
                     xx = self.bcp14_re.finditer(tree.text)
                     for x in xx:
                         log.error(u"bcp14 text '{0}' found without bcp14 tag around it".
-                                  format(x.group(0)), where=tree)
+                                  format(x.group(0)))
 
         for node in tree.iterchildren():
             self.checkTree(node)

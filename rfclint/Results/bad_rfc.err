@@ -1,3 +1,5 @@
-ERROR: Unable to validate the XML document: Tests/bad_rfc.xml
- Tests/bad_rfc.xml: Line 6: Did not expect element organization there
- Tests/bad_rfc.xml: Line 6: Element author has extra content: organization
+Error: Unable to validate the XML document: Tests/bad_rfc.xml
+Error: dummy
+ Tests/bad_rfc.xml: Line 2: Element front content does not follow the DTD, expecting (title , author+ , date , area* , workgroup* , keyword* , abstract? , note*), got (title author )
+ Tests/bad_rfc.xml: Line 4: Element author content does not follow the DTD, expecting (organization? , address?), got (organization organization )
+ Tests/bad_rfc.xml: Line 10: Element section does not carry attribute title

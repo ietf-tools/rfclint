@@ -13,7 +13,7 @@ except ImportError:
     haveCurses = False
 
 from rfclint.CursesCommon import CursesCommon
-from rfctools_common import log
+from xml2rfc import log
 from rfclint.spell import RfcLintError, CheckAttributes, CutNodes
 
 if six.PY2:
@@ -119,10 +119,9 @@ class Dups(CursesCommon):
                         else:
                             if attributeName:
                                 log.error("Duplicate word found '{0}' in attribute '{1}'".
-                                          format(lastX, attributeName), where=words[1])
+                                          format(lastX, attributeName))
                             else:
-                                log.error("Duplicate word found '{0}'".format(lastX),
-                                          where=words[1])
+                                log.error("Duplicate word found '{0}'".format(lastX))
 
                 last = g
                 lastX = w.group(0).strip()
@@ -212,8 +211,7 @@ class Dups(CursesCommon):
                 return
             if ch == '?':
                 if not self.curses:
-                    log.error("HELP:  ) Ignore, D) Delete Word, R) Replace Word, Q) Quit, X) Exit.",
-                              additional=0)
+                    log.error("HELP:  ) Ignore, D) Delete Word, R) Replace Word, Q) Quit, X) Exit.")
             elif ch == 'Q' or ch == 'q':
                 if self.curses:
                     self.curses.addstr(curses.LINES-1, 0, "Are you sure you want to abort?")

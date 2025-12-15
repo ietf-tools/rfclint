@@ -2,13 +2,12 @@
 # Copyright The IETF Trust 2018-9, All Rights Reserved
 # ----------------------------------------------------
 
-import sys
 import io
 import subprocess
 import re
 import os
 import six
-from rfctools_common import log
+from xml2rfc import log
 from rfclint.spell import which, RfcLintError
 
 if six.PY3:
@@ -31,28 +30,15 @@ class AbnfChecker(object):
             program = which(look_for)
 
             if not program:
-                # Look for the version that we provide
-                # Match with what is in setup.py
-                if sys.platform == "win32" or sys.platform == "cygwin":
-                    program = os.path.dirname(os.path.realpath(__file__)) \
-                        + "/../bin/bap.exe"
-                elif sys.platform.startswith("linux") or sys.platform == "darwin":
-                    program = os.path.dirname(os.path.realpath(__file__)) + "/../bin/bap"
-                else:
-                    raise RfcLintError("No pre-packaged bap exists for the platform " +
-                                       sys.platform +
-                                       " is distributed in the package and bap not found in path.")
-                program = which(program)
-                if not program:
-                    raise RfcLintError("The program '{0}' does not exist or is not executable".
-                                       format(look_for))
+                raise RfcLintError("Install bap.")
+
         self.abnfProgram = program
 
     def validate(self, tree):
         stdin = io.StringIO()
         xtract = SourceExtracter(tree, "abnf")
         if not xtract.ExtractToFile(stdin):
-            log.info("No ABNF to check")
+            log.write("No ABNF to check")
             return False
         cmds = [self.abnfProgram, "-q"]
 
@@ -83,20 +69,21 @@ class AbnfChecker(object):
                     runningLine = 0
                     for xxx in xtract.lineOffsets:
                         if line < runningLine + xxx[2]:
-                            log.error(m.group(4), file=xxx[0], line=xxx[1] + line - runningLine)
+                            log.error("{0}:{1}: {2}".format(
+                                      xxx[0], xxx[1] + line - runningLine, m.group(4)))
                             noError = False
                             break
                         runningLine += xxx[2] - 1
                 else:
-                    log.error(m.group(4), file=filename, line=line)
+                    log.error("{0}:{1}: {2}".format(str(filename), str(line), m.group(4)))
                     noError = False
             else:
-                log.info(err)
+                log.write(err)
                 noWarn = False
         if noError and noWarn:
-            log.info("ABNF checked with no warnings or errors")
+            log.write("ABNF checked with no warnings or errors")
         elif noError:
-            log.info("ABNF checked with no errors")
+            log.write("ABNF checked with no errors")
         return True
 
 
