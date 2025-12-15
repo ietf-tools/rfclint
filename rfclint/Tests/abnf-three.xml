@@ -1,4 +1,4 @@
-<rfc>
+<rfc ipr="trust200902" docName="draft-schaad-abnf-00"  category="exp" submissionType= "independent" version="3">
   <front>
     <title/>
     
@@ -7,9 +7,10 @@
     </author>
   </front>
   <middle>
-    <section>
-  <sourcecode type="abnf">
-    <![CDATA[
+    <section title="ABNF">
+      <t>
+        <sourcecode type="abnf">
+<![CDATA[
 cddl = S 1*rule
 rule = typename [genericparm] S assign S type S
        / groupname [genericparm] S assign S grpent S
@@ -25,9 +26,9 @@ genericparm = "<" S id S *("," S id S ) ">"
 genericarg = "<" S type1 S *("," S type1 S ) ">"
 
 ]]>
-  </sourcecode>
-  <sourcecode type="abnf">
-    <![CDATA[
+        </sourcecode>
+        <sourcecode type="abnf">
+<![CDATA[
 type = type1 S *("/" S type1 S)
 
 type1 = type2 [S (rangeop / ctlop) S type2]
@@ -65,9 +66,9 @@ bareword = id
 second errro
 
 ]]>
-  </sourcecode>
-  <sourcecode type="abnf">
-    <![CDATA[
+        </sourcecode>
+        <sourcecode type="abnf">
+<![CDATA[
 optcom = S ["," S]
 
 third error
@@ -117,11 +118,11 @@ COMMENT = ";" *PCHAR CRLF
 PCHAR = %x20-10FFFD
 CRLF = %x0A / %x0D.0A
 ]]>
-  </sourcecode>
-
-  <sourcecode type="ASN.1">
+        </sourcecode>
+        <sourcecode type="ASN.1">
     FOO ::= BEGIN END
-  </sourcecode>
+        </sourcecode>
+      </t>
     </section>
   </middle>
 </rfc>

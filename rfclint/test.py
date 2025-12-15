@@ -234,8 +234,9 @@ class Test_Schema(unittest.TestCase):
 
     def test_invalid_svg(self):
         """ Load and run w/ a valid RFC, but invalid included SVG file """
-        check_process(self, [sys.executable, test_program, "Tests/bad_rfc_svg.xml"],
-                      "Results/bad_rfc_svg.out", "Results/bad_rfc_svg.err", None, None)
+        check_process(self, [sys.executable, test_program, "--no-rng", "--no-spell",
+                             "Tests/bad_rfc_svg.xml"], "Results/bad_rfc_svg.out",
+                             "Results/bad_rfc_svg.err", None, None)
 
     def test_clean_rng(self):
         """ Load and run w/ a valid RFC """
@@ -724,6 +725,11 @@ def compare_file(errFile, stderr, displayError):
     lines2 = [line.replace('$$CWD$$', '') for line in lines2]
     lines2 = [line.replace(cwd, '') for line in lines2]
     lines1 = [line.replace(cwd, '') for line in lines1]
+
+    # Remove xml2rfc DTD warnings
+    lines1 = [line for line in lines1 if not line.startswith("Warning: No DTD given")]
+    # Remove non-ASCII warnings
+    lines1 = [line for line in lines1 if not line.strip().endswith("non-ASCII characters in RFCXML.")]
 
     d = difflib.Differ()
     result = list(d.compare(lines1, lines2))

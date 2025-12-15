@@ -1,15 +1,15 @@
-<rfc>
+<rfc ipr="trust200902" docName="draft-schaad-abnf-00"  category="exp" submissionType= "independent" version="3">
   <front>
-    <title/>
-    
+    <title>ABNF</title>
     <author fullname="Jim Schaad" initials="J" surname="Schaad">
       <organization>IETF</organization>
     </author>
   </front>
   <middle>
-    <section>
-  <sourcecode type="abnf">
-    <![CDATA[
+    <section title="ABNF">
+      <t>
+        <sourcecode type="abnf">
+<![CDATA[
 cddl = S 1*rule
 rule = typename [genericparm] S assign S type S
        / groupname [genericparm] S assign S grpent S
@@ -105,11 +105,11 @@ COMMENT = ";" *PCHAR CRLF
 PCHAR = %x20-10FFFD
 CRLF = %x0A / %x0D.0A
 ]]>
-  </sourcecode>
-
-  <sourcecode type="ASN.1">
+        </sourcecode>
+        <sourcecode type="ASN.1">
     FOO ::= BEGIN END
-  </sourcecode>
+        </sourcecode>
+      </t>
     </section>
   </middle>
 </rfc>

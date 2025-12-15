@@ -219,7 +219,7 @@ def main():
             log.error('Unable to validate the XML document: ' + os.path.normpath(source))
             log.exception("dummy", errors)
             sys.exit(1)
-        log.note("Schema validation passes")
+        log.write("Schema validation passes")
     else:
         log.note("Skipping schema validation")
 

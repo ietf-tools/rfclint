@@ -1,4 +1,5 @@
-ERROR: Unable to validate the XML document: Tests/bad_rfc_svg.xml
- Tests/bad_rfc_svg.xml: Line 13: Invalid attribute fill for element circle
- Tests/bad_rfc_svg.xml: Line 14: Did not expect element rectangle there
- Tests/bad_rfc_svg.xml: Line 14: Element svg has extra content: rectangle
+No ABNF to check
+Tests/bad_rfc_svg.xml:12: The attribute viewBox is required on the root svg element
+Tests/bad_rfc_svg.xml:12: Trying to put in the attribute with value '0 0 100.0 100.0'
+Tests/bad_rfc_svg.xml:13: The attribute 'fill' does not allow the value 'red', replaced with 'black'
+Tests/bad_rfc_svg.xml:14: The element 'rectangle' is not allowed as a child of 'svg'
