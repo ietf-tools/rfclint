@@ -1,0 +1,186 @@
+name: Tests + Code Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze Code
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: python
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+  tests-linux:
+    name: Unit Tests (GNU/Linux)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install aspell (en)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y aspell aspell-en
+
+    - name: Download bap
+      run: |
+        wget https://github.com/ietf-tools/bap/archive/refs/heads/master.zip
+        unzip -q master.zip -d /tmp/bap
+
+    - name: Build bap
+      working-directory: /tmp/bap/bap-master/
+      run: |
+        sudo apt-get install -y bison flex libfl-dev
+        sudo ./configure
+        sudo make
+        sudo cp bap /bin
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install tox tox-gh-actions
+
+    - name: Test with tox
+      env:
+        PLATFORM: ubuntu-latest
+      run: tox
+
+  tests-macos:
+    name: Unit Tests (macOS)
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install aspell (en) and other required system dependencies
+      run: |
+        brew update
+        brew install aspell bison flex
+
+    - name: Download bap
+      run: |
+        wget https://github.com/ietf-tools/bap/archive/refs/heads/master.zip
+        unzip -q master.zip -d /tmp/bap
+
+    - name: Build bap
+      working-directory: /tmp/bap/bap-master/
+      run: |
+        sudo ./configure
+        sudo make
+        sudo cp bap /usr/local/bin
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install tox tox-gh-actions
+
+    - name: Test with tox
+      env:
+        PLATFORM: macos-latest
+      run: tox
+
+#  tests-windows:
+#    name: Unit Tests (windows)
+#    runs-on: windows-latest
+#
+#    strategy:
+#      matrix:
+#        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+#
+#    steps:
+#    - name: Checkout repository
+#      uses: actions/checkout@v4
+#
+#    - name: Install hunspell (en) and other required system dependencies
+#      run: |
+#        choco install mingw -y
+#        choco install winflexbison3 -y
+#        choco install hunspell.portable -y
+#
+#    - name: Add Make to PATH
+#      shell: powershell
+#      run: |
+#        $mingwPath = "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
+#        "$mingwPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+#
+#    - name: Download bap
+#      shell: powershell
+#      run: |
+#        $url = "https://github.com/ietf-tools/bap/archive/refs/heads/master.zip"
+#        $destination = "master.zip"
+#        $destinationPath = "bap"
+#
+#        Invoke-WebRequest -Uri $url -OutFile $destination
+#        New-Item -ItemType Directory -Force -Path $destinationPath | Out-Null
+#        Expand-Archive -Path $destination -DestinationPath $destinationPath -Force
+#
+#    - name: Build bap
+#      shell: cmd
+#      working-directory: ./bap
+#      run: |
+#        make
+#
+#    - name: Copy bap binary to system path
+#      shell: powershell
+#      run: |
+#        $installDir = "$env:USERPROFILE\tools\bin"
+#        $binaryBap = "bap\bap"
+#        New-Item -ItemType Directory -Force -Path $installDir | Out-Null
+#        Copy-Item -Path $BinaryName -Destination "$installDir\$BinaryName"
+#        "$installDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+#
+#    - name: Setup Python ${{ matrix.python-version }}
+#      uses: actions/setup-python@v5
+#      with:
+#        python-version: ${{ matrix.python-version }}
+#
+#    - name: Install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        python -m pip install tox tox-gh-actions
+#
+#    - name: Test with tox
+#      env:
+#        PLATFORM: windows-latest
+#      run: tox
