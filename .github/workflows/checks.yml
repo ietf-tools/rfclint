@@ -119,3 +119,62 @@ jobs:
       env:
         PLATFORM: macos-latest
       run: tox
+
+  tests-windows:
+    name: Unit Tests (windows)
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install aspell (en) and other required system dependencies
+      run: |
+        choco install mingw -y
+        choco install winflexbison3 -y
+        choco install aspell -y
+
+    - name: Add Make to PATH
+      shell: powershell
+      run: |
+        $mingwPath = "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin"
+        "$mingwPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    - name: Download bap
+      run: |
+        wget https://github.com/ietf-tools/bap/archive/refs/heads/master.zip
+        unzip -q master.zip -d bap-dir
+
+    - name: Build bap
+      shell: cmd
+      run: |
+        cd bap\bap-master\
+        make
+
+    - name: Copy bap binary to system path
+      shell: powershell
+      run: |
+        $InstallDir = "$env:USERPROFILE\tools\bin"
+        $BinaryBap = "bap\bap-master\bap"
+        New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
+        Copy-Item -Path $BinaryName -Destination "$InstallDir\$BinaryName"
+        "$InstallDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install tox tox-gh-actions
+
+    - name: Test with tox
+      env:
+        PLATFORM: macos-latest
+      run: tox
