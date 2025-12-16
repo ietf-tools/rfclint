@@ -44,6 +44,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Install aspell (en)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y aspell aspell-en
+
     - name: Download bap
       run: |
         wget https://github.com/ietf-tools/bap/archive/refs/heads/master.zip
