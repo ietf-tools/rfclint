@@ -145,9 +145,15 @@ jobs:
         "$mingwPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Download bap
+      shell: powershell
       run: |
-        wget https://github.com/ietf-tools/bap/archive/refs/heads/master.zip
-        unzip -q master.zip -d bap-dir
+        $url = "https://github.com/ietf-tools/bap/archive/refs/heads/master.zip"
+        $destination = "master.zip"
+        $destinationPath = "bap"
+
+        Invoke-WebRequest -Uri $url -OutFile $destination
+        New-Item -ItemType Directory -Force -Path $destinationPath | Out-Null
+        Expand-Archive -Path $archivePath -DestinationPath $destinationPath -Force
 
     - name: Build bap
       shell: cmd
@@ -158,11 +164,11 @@ jobs:
     - name: Copy bap binary to system path
       shell: powershell
       run: |
-        $InstallDir = "$env:USERPROFILE\tools\bin"
-        $BinaryBap = "bap\bap-master\bap"
-        New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
-        Copy-Item -Path $BinaryName -Destination "$InstallDir\$BinaryName"
-        "$InstallDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        $installDir = "$env:USERPROFILE\tools\bin"
+        $binaryBap = "bap\bap-master\bap"
+        New-Item -ItemType Directory -Force -Path $installDir | Out-Null
+        Copy-Item -Path $BinaryName -Destination "$installDir\$BinaryName"
+        "$installDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
