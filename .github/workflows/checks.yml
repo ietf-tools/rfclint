@@ -157,8 +157,8 @@ jobs:
 
     - name: Build bap
       shell: cmd
+      working-directory: ./bap/bap-master/
       run: |
-        cd bap\bap-master\
         make
 
     - name: Copy bap binary to system path
