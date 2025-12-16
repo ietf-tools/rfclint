@@ -103,7 +103,7 @@ jobs:
       run: |
         sudo ./configure
         sudo make
-        sudo cp aex bap /bin
+        sudo cp aex bap /usr/local/bin
 
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
