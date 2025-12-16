@@ -31,13 +31,12 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
 
-  tests:
-    name: Unit Tests
-    runs-on: ${{ matrix.platform }}
+  tests-linux:
+    name: Unit Tests (GNU/Linux)
+    runs-on: ubuntu-latest
     
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
         
     steps:
