@@ -73,5 +73,5 @@ jobs:
         
     - name: Test with tox
       env:
-        PLATFORM: ${{ matrix.platform }}
+        PLATFORM: ubuntu-latest
       run: tox
