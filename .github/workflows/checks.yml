@@ -59,7 +59,7 @@ jobs:
         sudo apt-get install -y bison flex libfl-dev
         sudo ./configure
         sudo make
-        sudo cp aex bap /bin
+        sudo cp bap /bin
 
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -103,7 +103,7 @@ jobs:
       run: |
         sudo ./configure
         sudo make
-        sudo cp aex bap /usr/local/bin
+        sudo cp bap /usr/local/bin
 
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
