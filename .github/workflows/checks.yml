@@ -132,11 +132,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install aspell (en) and other required system dependencies
+    - name: Install hunspell (en) and other required system dependencies
       run: |
         choco install mingw -y
         choco install winflexbison3 -y
-        choco install aspell -y
+        choco install hunspell.portable -y
 
     - name: Add Make to PATH
       shell: powershell
@@ -176,5 +176,5 @@ jobs:
 
     - name: Test with tox
       env:
-        PLATFORM: macos-latest
+        PLATFORM: windows-latest
       run: tox
