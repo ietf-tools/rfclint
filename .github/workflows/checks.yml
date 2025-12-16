@@ -88,10 +88,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install aspell (en)
+    - name: Install aspell (en) and other required system dependencies
       run: |
         brew update
-        brew install aspell
+        brew install aspell bison flex
 
     - name: Download bap
       run: |
@@ -101,7 +101,6 @@ jobs:
     - name: Build bap
       working-directory: /tmp/bap/bap-master/
       run: |
-        sudo apt-get install -y bison flex libfl-dev
         sudo ./configure
         sudo make
         sudo cp aex bap /bin
